@@ -9,7 +9,7 @@ from collections import namedtuple
 
 
 Fact = namedtuple('Fact', ['path', 'name', 'body', 'efactor', 'interval', 'count'])
-FactRow = namedtuple('FactRow', ['filename', 'fact_name', 'first_seen', 
+FactRow = namedtuple('FactRow', ['filename', 'fact_name', 'first_seen',
     'last_scored', 'interval', 'efactor'])
 
 
@@ -44,7 +44,7 @@ def get_all_fact_files(locations):
 def ensure_database_initialized(conn):
     c = conn.cursor()
     c.execute('''CREATE TABLE facts
-             (filename text, fact_name text, first_seen timestamp, 
+             (filename text, fact_name text, first_seen timestamp,
              last_scored timestamp, efactor real, interval integer, count integer)''')
     conn.commit()
 
@@ -69,7 +69,7 @@ def update_facts_from_db(facts):
         fact_filename = os.path.basename(fact.path)
         conn = connections.get(fact_dir)
         if conn is None:
-            db_path = os.path.join(fact_dir, '.srs.db')
+            db_path = os.path.join(fact_dir, 'srs.db')
             if not os.path.exists(db_path):
                 conn = sqlite3.connect(db_path, detect_types=1)
                 ensure_database_initialized(conn)
@@ -101,7 +101,7 @@ def load_facts_from_files(files):
     for fact_filename in files:
         with open(fact_filename, 'r') as f:
             fact_file = f.read()
-            
+
         for line in fact_file.splitlines():
             match = fact_re.match(line)
             if match:
